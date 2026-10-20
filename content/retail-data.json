@@ -1,0 +1,368 @@
+{
+  "records": 3900,
+  "revenue": 233081,
+  "categories": [
+    {
+      "name": "Clothing",
+      "purchases": 1737,
+      "products": 11,
+      "revenue": 104264,
+      "revenuePerProduct": 9478.545454545454,
+      "purchasesPerProduct": 157.9090909090909
+    },
+    {
+      "name": "Footwear",
+      "purchases": 599,
+      "products": 4,
+      "revenue": 36093,
+      "revenuePerProduct": 9023.25,
+      "purchasesPerProduct": 149.75
+    },
+    {
+      "name": "Outerwear",
+      "purchases": 324,
+      "products": 2,
+      "revenue": 18524,
+      "revenuePerProduct": 9262.0,
+      "purchasesPerProduct": 162.0
+    },
+    {
+      "name": "Accessories",
+      "purchases": 1240,
+      "products": 8,
+      "revenue": 74200,
+      "revenuePerProduct": 9275.0,
+      "purchasesPerProduct": 155.0
+    }
+  ],
+  "items": [
+    {
+      "name": "Jewelry",
+      "category": "Accessories",
+      "purchases": 171,
+      "rating": 3.756140350877193,
+      "popularity": 642.3,
+      "revenue": 10010
+    },
+    {
+      "name": "Pants",
+      "category": "Clothing",
+      "purchases": 171,
+      "rating": 3.7187134502923977,
+      "popularity": 635.9000000000001,
+      "revenue": 10090
+    },
+    {
+      "name": "Blouse",
+      "category": "Clothing",
+      "purchases": 171,
+      "rating": 3.683625730994152,
+      "popularity": 629.9,
+      "revenue": 10410
+    },
+    {
+      "name": "Dress",
+      "category": "Clothing",
+      "purchases": 166,
+      "rating": 3.754819277108434,
+      "popularity": 623.3,
+      "revenue": 10320
+    },
+    {
+      "name": "Sweater",
+      "category": "Clothing",
+      "purchases": 164,
+      "rating": 3.7670731707317073,
+      "popularity": 617.8,
+      "revenue": 9462
+    },
+    {
+      "name": "Sandals",
+      "category": "Footwear",
+      "purchases": 160,
+      "rating": 3.84125,
+      "popularity": 614.6,
+      "revenue": 9200
+    },
+    {
+      "name": "Shirt",
+      "category": "Clothing",
+      "purchases": 169,
+      "rating": 3.629585798816568,
+      "popularity": 613.4,
+      "revenue": 10332
+    },
+    {
+      "name": "Jacket",
+      "category": "Outerwear",
+      "purchases": 163,
+      "rating": 3.76319018404908,
+      "popularity": 613.4,
+      "revenue": 9249
+    },
+    {
+      "name": "Belt",
+      "category": "Accessories",
+      "purchases": 161,
+      "rating": 3.761490683229814,
+      "popularity": 605.6,
+      "revenue": 9635
+    },
+    {
+      "name": "Sunglasses",
+      "category": "Accessories",
+      "purchases": 161,
+      "rating": 3.74472049689441,
+      "popularity": 602.9,
+      "revenue": 9649
+    },
+    {
+      "name": "Coat",
+      "category": "Outerwear",
+      "purchases": 161,
+      "rating": 3.7304347826086954,
+      "popularity": 600.6,
+      "revenue": 9275
+    },
+    {
+      "name": "Skirt",
+      "category": "Clothing",
+      "purchases": 158,
+      "rating": 3.7822784810126584,
+      "popularity": 597.6,
+      "revenue": 9402
+    },
+    {
+      "name": "Socks",
+      "category": "Clothing",
+      "purchases": 159,
+      "rating": 3.750943396226415,
+      "popularity": 596.4,
+      "revenue": 9252
+    },
+    {
+      "name": "Hat",
+      "category": "Accessories",
+      "purchases": 154,
+      "rating": 3.8064935064935064,
+      "popularity": 586.1999999999999,
+      "revenue": 9375
+    },
+    {
+      "name": "Shorts",
+      "category": "Clothing",
+      "purchases": 157,
+      "rating": 3.711464968152866,
+      "popularity": 582.7,
+      "revenue": 9433
+    },
+    {
+      "name": "Scarf",
+      "category": "Accessories",
+      "purchases": 157,
+      "rating": 3.7,
+      "popularity": 580.9,
+      "revenue": 9561
+    },
+    {
+      "name": "Handbag",
+      "category": "Accessories",
+      "purchases": 153,
+      "rating": 3.7751633986928104,
+      "popularity": 577.6,
+      "revenue": 8857
+    },
+    {
+      "name": "Shoes",
+      "category": "Footwear",
+      "purchases": 150,
+      "rating": 3.747333333333333,
+      "popularity": 562.1,
+      "revenue": 9240
+    },
+    {
+      "name": "Hoodie",
+      "category": "Clothing",
+      "purchases": 151,
+      "rating": 3.719205298013245,
+      "popularity": 561.6,
+      "revenue": 8767
+    },
+    {
+      "name": "T-shirt",
+      "category": "Clothing",
+      "purchases": 147,
+      "rating": 3.7829931972789117,
+      "popularity": 556.1,
+      "revenue": 9248
+    },
+    {
+      "name": "Boots",
+      "category": "Footwear",
+      "purchases": 144,
+      "rating": 3.8125,
+      "popularity": 549.0,
+      "revenue": 9018
+    },
+    {
+      "name": "Sneakers",
+      "category": "Footwear",
+      "purchases": 145,
+      "rating": 3.7579310344827586,
+      "popularity": 544.9,
+      "revenue": 8635
+    },
+    {
+      "name": "Gloves",
+      "category": "Accessories",
+      "purchases": 140,
+      "rating": 3.8642857142857143,
+      "popularity": 541.0,
+      "revenue": 8477
+    },
+    {
+      "name": "Backpack",
+      "category": "Accessories",
+      "purchases": 143,
+      "rating": 3.7524475524475522,
+      "popularity": 536.6,
+      "revenue": 8636
+    },
+    {
+      "name": "Jeans",
+      "category": "Clothing",
+      "purchases": 124,
+      "rating": 3.6483870967741936,
+      "popularity": 452.4,
+      "revenue": 7548
+    }
+  ],
+  "correlation": -0.14993503235333142,
+  "promotion": {
+    "Yes": {
+      "count": 1677,
+      "averagePurchase": 59.27906976744186,
+      "revenue": 99411
+    },
+    "No": {
+      "count": 2223,
+      "averagePurchase": 60.130454340980656,
+      "revenue": 133670
+    }
+  },
+  "promoDiscountMismatches": 0,
+  "exposureByCategory": [
+    {
+      "category": "Clothing",
+      "Yes": {
+        "count": 731,
+        "averagePurchase": 59.752393980848154
+      },
+      "No": {
+        "count": 1006,
+        "averagePurchase": 60.22365805168986
+      }
+    },
+    {
+      "category": "Footwear",
+      "Yes": {
+        "count": 259,
+        "averagePurchase": 61.7992277992278
+      },
+      "No": {
+        "count": 340,
+        "averagePurchase": 59.07941176470588
+      }
+    },
+    {
+      "category": "Outerwear",
+      "Yes": {
+        "count": 144,
+        "averagePurchase": 55.31944444444444
+      },
+      "No": {
+        "count": 180,
+        "averagePurchase": 58.65555555555556
+      }
+    },
+    {
+      "category": "Accessories",
+      "Yes": {
+        "count": 543,
+        "averagePurchase": 58.48987108655617
+      },
+      "No": {
+        "count": 697,
+        "averagePurchase": 60.88952654232425
+      }
+    }
+  ],
+  "segments": [
+    {
+      "field": "Gender",
+      "value": "Female",
+      "count": 1248,
+      "exposed": 0
+    },
+    {
+      "field": "Gender",
+      "value": "Male",
+      "count": 2652,
+      "exposed": 1677
+    },
+    {
+      "field": "Subscription Status",
+      "value": "No",
+      "count": 2847,
+      "exposed": 624
+    },
+    {
+      "field": "Subscription Status",
+      "value": "Yes",
+      "count": 1053,
+      "exposed": 1053
+    },
+    {
+      "field": "Age Group",
+      "value": "Adult",
+      "count": 1510,
+      "exposed": 634
+    },
+    {
+      "field": "Age Group",
+      "value": "Senior",
+      "count": 788,
+      "exposed": 345
+    },
+    {
+      "field": "Age Group",
+      "value": "Young adult",
+      "count": 1602,
+      "exposed": 698
+    },
+    {
+      "field": "Season",
+      "value": "Fall",
+      "count": 975,
+      "exposed": 397
+    },
+    {
+      "field": "Season",
+      "value": "Spring",
+      "count": 999,
+      "exposed": 440
+    },
+    {
+      "field": "Season",
+      "value": "Summer",
+      "count": 955,
+      "exposed": 423
+    },
+    {
+      "field": "Season",
+      "value": "Winter",
+      "count": 971,
+      "exposed": 417
+    }
+  ]
+}

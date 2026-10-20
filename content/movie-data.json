@@ -1,0 +1,104 @@
+{
+  "genres": [
+    {
+      "name": "Drama",
+      "roi": 126.69980826164492,
+      "risk": 742.87593831454
+    },
+    {
+      "name": "Comedy",
+      "roi": 76.59069408749133,
+      "risk": 234.15673622583745
+    },
+    {
+      "name": "Biography",
+      "roi": 68.69303533108082,
+      "risk": 238.00630345161628
+    },
+    {
+      "name": "Adventure",
+      "roi": 29.109049902814863,
+      "risk": 121.86009552968623
+    },
+    {
+      "name": "Action",
+      "roi": 9.161158500934318,
+      "risk": 112.05929564962906
+    },
+    {
+      "name": "Crime",
+      "roi": 6.922828767505843,
+      "risk": 116.22919023080172
+    }
+  ],
+  "strategies": {
+    "comedy": {
+      "name": "Comedy",
+      "roi": 76.59069408749133,
+      "risk": 234.15673622583745,
+      "budgets": [
+        {
+          "name": "Low Budget",
+          "roi": 115.25645421773103,
+          "risk": 352.7123690202552
+        },
+        {
+          "name": "Medium Budget",
+          "roi": 73.45821185636187,
+          "risk": 167.49304991379097
+        },
+        {
+          "name": "High Budget",
+          "roi": 28.345244512344152,
+          "risk": 81.08810005199851
+        },
+        {
+          "name": "Blockbuster",
+          "roi": -79.34089556243823,
+          "risk": 27.1475363960847
+        }
+      ],
+      "source": "comedy budget class; ROI PER GENRA",
+      "heading": "Prioritizing return relative to risk.",
+      "description": "I chose comedy as the foundation of the conservative strategy because its returns varied less than drama’s in this sample. Within comedy, I used average ROI divided by its standard deviation to compare options and weigh return against risk.",
+      "actor": "Steve Carell",
+      "actorNote": "2.32 average ROI / standard deviation, based on 3 films.",
+      "director": "Seth Gordon",
+      "directorNote": "1.54 average ROI / standard deviation, based on 3 films."
+    },
+    "drama": {
+      "name": "Drama",
+      "roi": 126.69980826164492,
+      "risk": 742.87593831454,
+      "budgets": [
+        {
+          "name": "Low Budget",
+          "roi": 307.09098283628214,
+          "risk": 1237.005846858892
+        },
+        {
+          "name": "Medium Budget",
+          "roi": 47.460783958458975,
+          "risk": 171.07402012224722
+        },
+        {
+          "name": "High Budget",
+          "roi": -8.913794469604786,
+          "risk": 79.9409913483028
+        },
+        {
+          "name": "Blockbuster",
+          "roi": -33.97576926464986,
+          "risk": 67.52376181334755
+        }
+      ],
+      "source": "drama budget class; ROI PER GENRA",
+      "heading": "Pursuing higher returns.",
+      "description": "Drama had a higher average ROI, with much larger variation. A few exceptional films can heavily influence this result.",
+      "actor": "Ryan Gosling",
+      "actorNote": "229.96% average ROI, based on 3 films.",
+      "director": "Alex Kendrick",
+      "directorNote": "Very high average return and volatility, based on 3 films."
+    }
+  }
+}
