@@ -1,0 +1,53 @@
+name: Import approved portfolio release
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    if: github.repository == 'DavidZviAlter/davidzvialter.github.io'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify and unpack approved release
+        shell: python
+        run: |
+          from pathlib import Path, PurePosixPath
+          import hashlib, zipfile
+          expected = {
+              "github-release-1.zip": "24b352701b3bf0c83d6a5f609a9e941fad892a4becac34266a1d3914b51e2e95",
+              "github-release-2.zip": "b1c7d1919a9cedbd1658e5d8d2b85cbdc16848b7e6c807aaf542669d1e650f47",
+              "github-release-3.zip": "9afc4743e4075e18f8aa7cfc0acd72eaf6de428b36ae179ac909ca5f9e11e23b",
+          }
+          if not any(Path(name).exists() for name in expected):
+              print("Release already imported.")
+              raise SystemExit(0)
+          seen = set()
+          for name, digest in expected.items():
+              assert hashlib.sha256(Path(name).read_bytes()).hexdigest() == digest, name
+              with zipfile.ZipFile(name) as archive:
+                  for entry in archive.namelist():
+                      path = PurePosixPath(entry)
+                      assert not path.is_absolute() and ".." not in path.parts
+                      assert ".git" not in path.parts and ".github" not in path.parts
+                      assert path.name != "David-Alter-CV.pdf"
+                      assert not path.name.startswith(".env")
+                      assert entry not in seen
+                      seen.add(entry)
+          for name in expected:
+              with zipfile.ZipFile(name) as archive:
+                  archive.extractall(".")
+          assert Path("docs/index.html").is_file()
+          assert Path("content/projects.ts").is_file()
+          assert not Path("docs/files/David-Alter-CV.pdf").exists()
+          for name in expected:
+              Path(name).unlink()
+      - name: Commit expanded source and website
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          chmod +x scripts/*.sh
+          git add .
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Import approved portfolio source and GitHub Pages website"
+          git push origin HEAD:main
