@@ -8,11 +8,12 @@ import base64, hashlib, json, mimetypes, re, sys
 SITE = Path(__file__).resolve().parents[1]
 ROOT = Path(sys.argv[1]).resolve() if len(sys.argv)>1 else SITE.parent
 BUILD = SITE/'dist/client'
+LIGHT = '--light' in sys.argv
 def parse(s): return html.fromstring(s)
 def serial(el): return html.tostring(el, encoding='unicode', method='html')
 def cls(el,name): return el.xpath(".//*[contains(concat(' ',normalize-space(@class),' '),' "+name+" ')]")
 def snapshot(path):
-    doc=parse((BUILD/path).read_text())
+    doc=parse((BUILD/path).read_text(encoding='utf-8'))
     return {tag:parse(serial(doc.xpath('//'+tag)[0])) for tag in ['main','header','footer']}
 
 home_snap=snapshot('index.html')
@@ -48,6 +49,9 @@ def asset(path):
         full=SITE/'public'/path.lstrip('/');payload=full.read_bytes()
         if not payload:raise ValueError('Empty asset: '+path)
         mime=mimetypes.guess_type(str(full))[0] or 'application/octet-stream'
+        if LIGHT and mime.startswith('image/'):
+            with Image.open(BytesIO(payload)) as im:
+                im.thumbnail((960,540));buffer=BytesIO();im.save(buffer,format='WEBP',quality=72);payload=buffer.getvalue();mime='image/webp'
         if mime.startswith('image/'):
             with Image.open(BytesIO(payload)) as im:im.load()
         assets[path]={'mime':mime,'base64':base64.b64encode(payload).decode()}
@@ -58,7 +62,13 @@ for root in roots+[header,footer]:
     for a in root.xpath('.//a[@href]'):
         href=a.get('href')
         if href.startswith('/files/'):
-            a.set('data-asset',asset(href));a.set('href','#');a.set('download',Path(href).name)
+
+            if LIGHT:
+                a.set('href','https://davidzvialter.github.io'+href);a.set('target','_blank');a.set('rel','noopener noreferrer')
+            else:
+                a.set('data-asset',asset(href));a.set('href','#');a.set('download',Path(href).name)
+        elif href.startswith('/ai-tools/'):
+            a.set('href','AI-Tool-Comparison.html')
         elif href.startswith('/projects/'):
             slug=href.split('/')[2];a.set('href','#project' if slug=='movie-investment' else '#project/'+slug)
         elif href.startswith('/privacy'):a.set('href','#privacy')
@@ -66,17 +76,20 @@ for root in roots+[header,footer]:
         elif href=='/':a.set('href','#home')
         elif href=='#main':a.set('href','#top')
         elif href=='#projects':a.set('href','#home-projects')
+        elif href.startswith('#') and href not in ('#','#top') and root.get('id','').startswith('project-'):
+            slug=root.get('id')[8:];route_name='project' if slug=='movie-investment' else 'project/'+slug
+            a.set('href','#'+route_name+'@'+href[1:])
     for img in root.xpath('.//img[starts-with(@src,"/")]'):
         img.set('data-asset',asset(img.get('src')));img.attrib.pop('src')
     for script in root.xpath('.//script'):script.getparent().remove(script)
-media=json.loads((SITE/'content/media.json').read_text())
-build_home=parse((BUILD/'index.html').read_text())
-css='\n'.join((BUILD/href.lstrip('/')).read_text() for href in build_home.xpath('//link[@rel="stylesheet"]/@href'))
+media=json.loads((SITE/'content/media.json').read_text(encoding='utf-8'))
+build_home=parse((BUILD/'index.html').read_text(encoding='utf-8'))
+css='\n'.join((BUILD/href.lstrip('/')).read_text(encoding='utf-8') for href in build_home.xpath('//link[@rel="stylesheet"]/@href'))
 extra='''[hidden]{display:none!important}.review-notice{padding:10px 20px;text-align:center;background:#173129;color:#c1e7dd;font-size:13px;line-height:1.6}.review-lightbox{padding:0;border:1px solid #3c575f;background:#091017;width:min(1200px,96vw);max-width:96vw;color:white;border-radius:8px}.review-lightbox::backdrop{background:#000d}.review-lightbox img{width:100%;display:block}.review-lightbox button{display:block;margin:10px 15px 10px auto;padding:8px 15px;border:1px solid #526773;border-radius:5px;cursor:pointer}button{cursor:pointer}'''
 script='''const assets=ASSETS;const media=MEDIA;const decks=DECKS;const pages=PAGES;const urls={};
 function assetURL(key){if(!urls[key]){const a=assets[key],b=atob(a.base64),bytes=new Uint8Array(b.length);for(let i=0;i<b.length;i++)bytes[i]=b.charCodeAt(i);urls[key]=URL.createObjectURL(new Blob([bytes],{type:a.mime}));}return urls[key];}
 document.querySelectorAll('[data-asset]').forEach(el=>{if(el.tagName==='A')el.addEventListener('click',()=>el.href=assetURL(el.dataset.asset));else el.src=assetURL(el.dataset.asset);});
-function route(){const hash=location.hash.slice(1);if(hash==='top'){window.scrollTo({top:0,behavior:'smooth'});return;}const page=pages.find(p=>p.hash===hash)||pages[0];pages.forEach(p=>document.getElementById(p.id).hidden=p!==page);document.title=page.title;if(hash.startsWith('home-'))document.getElementById(hash.slice(5))?.scrollIntoView();else window.scrollTo(0,0);}
+function route(){const hash=location.hash.slice(1);if(hash==='top'){window.scrollTo({top:0,behavior:'smooth'});return;}const page=pages.find(p=>p.hash===hash.split('@')[0])||pages[0];pages.forEach(p=>document.getElementById(p.id).hidden=p!==page);document.title=page.title;if(hash.startsWith('home-'))document.getElementById(hash.slice(5))?.scrollIntoView();else if(hash.includes('@'))document.getElementById(page.id).querySelector('[id="'+CSS.escape(hash.split('@')[1])+'"]')?.scrollIntoView();else window.scrollTo(0,0);}
 window.addEventListener('hashchange',route);route();
 const lightbox=document.getElementById('slide-dialog');lightbox.querySelector('button').onclick=()=>lightbox.close();
 for(const deck of decks){const frame=document.querySelector('[data-review-deck="'+deck.key+'"]');let slide=0;function showSlide(n){slide=Math.max(0,Math.min(deck.titles.length-1,n));const img=frame.querySelector('img');img.src=assetURL(deck.base+'/slide-'+(slide+1)+'.webp');img.alt=deck.titles[slide];frame.querySelector('[data-slide-count]').textContent=(slide+1)+' / '+deck.titles.length;frame.querySelector('[data-slide-prev]').disabled=slide===0;frame.querySelector('[data-slide-next]').disabled=slide===deck.titles.length-1;}
@@ -91,7 +104,7 @@ const categorySelect=document.querySelector('[data-retail-select]');if(categoryS
 bindings={'ASSETS':assets,'MEDIA':media,'DECKS':decks,'PAGES':pages}
 script=re.sub(r'\b(ASSETS|MEDIA|DECKS|PAGES)\b',lambda m:json.dumps(bindings[m.group(0)],separators=(',',':')),script).replace('</','<\\/')
 csp="default-src 'none'; script-src 'sha256-"+base64.b64encode(hashlib.sha256(script.encode()).digest()).decode()+"'; script-src-attr 'none'; style-src 'unsafe-inline'; img-src data: blob:; frame-src https://drive.google.com; object-src 'none'; base-uri 'none'; form-action 'none'; connect-src 'none'; font-src 'none'; media-src blob:"
-result='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="'+csp+'"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width, initial-scale=1"><title>David Alter | Portfolio review</title><style>'+css+extra+'</style></head><body><div class="review-notice" dir="rtl">גרסת סקירה מעודכנת עם פרויקט SQL ו־Excel קבוצתי — טרם פורסם.</div><a class="skip-link" href="#top">Skip to content</a>'+serial(header)+''.join(serial(root) for root in roots)+serial(footer)+'<dialog id="slide-dialog" class="review-lightbox"><button type="button">Close ✕</button><img alt="Enlarged presentation slide"></dialog><script>'+script+'</script></body></html>'
-ROOT.mkdir(exist_ok=True,parents=True);out=ROOT/'David-Alter-Portfolio-Review.html';out.write_text(result)
-(ROOT/'inspection').mkdir(exist_ok=True);(ROOT/'inspection/review-script.js').write_text(script)
+result='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="'+csp+'"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width, initial-scale=1"><title>David Alter | Portfolio review</title><style>'+css+extra+'</style></head><body><div class="review-notice">Portfolio review including Yedavio. Open the downloaded file in a browser; Drive preview is not the interactive website.</div><a class="skip-link" href="#top">Skip to content</a>'+serial(header)+''.join(serial(root) for root in roots)+serial(footer)+'<dialog id="slide-dialog" class="review-lightbox"><button type="button">Close ✕</button><img alt="Enlarged presentation slide"></dialog><script>'+script+'</script></body></html>'
+ROOT.mkdir(exist_ok=True,parents=True);out=ROOT/'David-Alter-Portfolio-Review.html';out.write_text(result,encoding='utf-8')
+(ROOT/'inspection').mkdir(exist_ok=True);(ROOT/'inspection/review-script.js').write_text(script,encoding='utf-8')
 print(json.dumps({'file':str(out),'bytes':out.stat().st_size,'embedded_assets':len(assets),'presentations':[len(d['titles']) for d in decks],'pages':len(pages)}))

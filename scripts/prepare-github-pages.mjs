@@ -22,11 +22,11 @@ for(const file of await files(output)){
  if(!file.endsWith('.html'))continue;
  let html=await readFile(file,'utf8');
  const hashes=[...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)].filter(m=>!m[1].match(/\bsrc\s*=/i)&&m[2].trim()).map(m=>`'sha256-${createHash('sha256').update(m[2]).digest('base64')}'`);
- const csp=["default-src 'self'",`script-src 'self' ${[...new Set(hashes)].join(' ')}`,"script-src-attr 'none'","style-src 'self' 'unsafe-inline'","img-src 'self' data: blob:","font-src 'self'","connect-src 'self'","frame-src https://drive.google.com","media-src 'self' blob:","object-src 'none'","base-uri 'none'","form-action 'none'"].join('; ');
+ const csp=["default-src 'self'",`script-src 'self' ${[...new Set(hashes)].join(' ')}`,"script-src-attr 'none'","style-src 'self' 'unsafe-inline'","img-src 'self' data: blob:","font-src 'self'","connect-src 'self'","frame-src 'self' https://drive.google.com","media-src 'self' blob:","object-src 'none'","base-uri 'none'","form-action 'none'"].join('; ');
  html=html.replace('<head>','<head><meta http-equiv="Content-Security-Policy" content="'+csp+'">');
  await writeFile(file,html);count++;
  const route=relative(output,file);
- if(route!=='index.html'&&route!=='404.html'){
+ if(route!=='index.html'&&route!=='404.html'&&!route.replaceAll('\\','/').startsWith('ai-tools/')){
   const alias=join(output,route.slice(0,-5),'index.html');await mkdir(dirname(alias),{recursive:true});await writeFile(alias,html);
  }
 }
