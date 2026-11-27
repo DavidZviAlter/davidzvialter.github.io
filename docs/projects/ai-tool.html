@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" data-type="software">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What's the best AI tool for the job? · David Alter</title>
+<meta name="description" content="A Python data pipeline that compares AI models, and free versus paid plans, with every claim linked to its source.">
+<meta name="theme-color" content="#000000">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="David Alter">
+<meta property="og:title" content="What's the best AI tool for the job? · David Alter">
+<meta property="og:description" content="A Python data pipeline comparing AI models, and free versus paid plans, with every claim linked to its source.">
+<meta property="og:url" content="https://davidzvialter.github.io/projects/ai-tool.html">
+<meta property="og:image" content="https://davidzvialter.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="David Alter: An operational mindset. Applied to data.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://davidzvialter.github.io/projects/ai-tool.html">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+.prose p{color:var(--ink-2);font-size:17px;margin:20px 0 0;max-width:60ch}
+.prose p b{color:var(--ink);font-weight:500}
+.path{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+.path li{display:grid;grid-template-columns:110px minmax(0,1fr);gap:16px;padding:22px 0;border-bottom:1px solid var(--line)}
+.path span{font:400 12px var(--mono);color:var(--ink-3);padding-top:4px}
+.path b{display:block;font-size:18px;font-weight:600;letter-spacing:-.02em}
+.path p{margin:4px 0 0;color:var(--ink-2);font-size:15px}
+/* leaders board: the tool's own output */
+.board{margin-top:48px}
+.board-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--line)}
+.board-tabs button{display:inline-flex;align-items:center;gap:8px;font:500 13px var(--sans);color:var(--ink-2);background:transparent;border:1px solid var(--line-2);border-radius:999px;padding:0 14px;min-height:38px;cursor:pointer;transition:background .25s var(--ease),color .25s,border-color .25s}
+.board-tabs button[aria-pressed=true]{background:color-mix(in oklab,var(--t) 26%,#050505);color:var(--ink);border-color:var(--t)}
+.board-tabs button:hover{border-color:color-mix(in oklab,var(--t) 60%,#000)}
+#board[data-task] .board-body{background:color-mix(in oklab,var(--t) 30%,#000)}
+#board[data-task] .board-body>div{background:color-mix(in oklab,var(--t) 13%,#050505);transition:background .35s var(--ease)}
+#board[data-task] .lbl,#board[data-task] .who{color:color-mix(in oklab,var(--tl) 30%,#b4b4b4)}
+#board[data-task] .top3 li span:first-child{color:var(--tl)}
+#board[data-task]{border-color:color-mix(in oklab,var(--t) 40%,#000)}
+.board-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1px;background:var(--line)}
+.board-body>div{background:var(--panel);padding:26px 26px 28px}
+.lbl{font-size:13px;color:var(--ink-2);margin-bottom:6px}
+.leader{font-size:clamp(26px,3.4vw,40px);font-weight:600;letter-spacing:-.03em;line-height:1.05;margin:0}
+.who{font-size:14px;color:var(--ink-3);margin:6px 0 16px}
+.top3{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.top3 li{display:grid;grid-template-columns:22px minmax(0,1fr) 58px;gap:10px;font-size:14px;align-items:center}
+.top3 li span:first-child{font:400 12px var(--mono);color:var(--ink-3)}
+.top3 li b{font-weight:500;text-align:right}
+.feats li{grid-template-columns:22px minmax(0,1fr) auto}
+.feats .badge{font-size:14px}
+.board-foot{padding:12px 24px;font-size:12px;color:var(--ink-3);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line)}
+.swap{transition:opacity .18s}.swap.fade{opacity:0}
+.pipe{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line-2);border-radius:16px;overflow:hidden;margin-top:48px}
+.pipe>div{background:var(--panel);padding:24px 22px 26px}
+.pipe code{font:400 12px var(--mono);color:var(--link)}
+.pipe h3{margin:10px 0 8px;font-size:19px;font-weight:600;letter-spacing:-.02em}
+.pipe p{margin:0;color:var(--ink-2);font-size:14px}
+.metric2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px}
+.metric2 .panel{padding:26px}
+.metric2 span{font:400 12px var(--mono);color:var(--ink-3)}
+.metric2 h3{margin:8px 0 10px;font-size:20px;font-weight:600;letter-spacing:-.02em}
+.metric2 p{margin:0;color:var(--ink-2);font-size:15px}
+.launch{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;padding:32px;border:1px solid var(--line-2);border-radius:16px;background:var(--panel);margin-top:48px}
+.launch h3{margin:0 0 6px;font-size:24px;font-weight:600;letter-spacing:-.02em}
+.launch p{margin:0;color:var(--ink-2)}
+@media (max-width:900px){
+  .board-body,.metric2{grid-template-columns:1fr}
+  .pipe{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:720px){
+  .pipe{grid-template-columns:1fr}
+  .path li{grid-template-columns:1fr;gap:6px}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="../index.html" aria-label="David Alter, home"><i>DA</i>David Alter</a>
+    <nav class="nav" aria-label="Main"><a href="../index.html#work" aria-current="page">Work</a><a href="../index.html#about">About</a><a href="../index.html#experience">Experience</a><a href="../ai-tool-comparison/index.html">AI tool</a><a href="../index.html#contact">Contact</a></nav>
+    <a class="btn" href="https://www.linkedin.com/in/david-alter-9a361833b/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="sheet" aria-label="Open menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg></button>
+  </div>
+</header>
+<nav class="sheet" id="sheet" aria-label="Mobile"><a href="../index.html#work">Work</a><a href="../index.html#about">About</a><a href="../index.html#experience">Experience</a><a href="../ai-tool-comparison/index.html">AI tool</a><a href="../index.html#contact">Contact</a></nav>
+
+<main id="main">
+<section class="p-hero">
+  <div class="wrap">
+    <div class="enter">
+      <a class="back" href="../index.html#work"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>All projects</a>
+      <h1>What's the best AI tool for the job?</h1>
+      <p class="lede">A Python data pipeline that compares AI models, and <b>free versus paid plans</b>, with every claim linked to its source.</p>
+      <div class="tools"><span>Python</span><span>APIs</span><span>Data validation</span><span>JavaScript</span><span>GitHub Pages</span></div>
+    </div>
+    <div class="facts">
+      <div><span>Coverage</span><b class="num" id="fCov">4 products · 8 plans</b></div>
+      <div><span>Models scored</span><b class="num" id="fModels">–</b></div>
+      <div><span>Benchmarks published</span><b class="num" id="fBench">–</b></div>
+      <div><span>Plans reviewed</span><b class="num" id="fPlans">–</b></div>
+    </div>
+
+    <div class="frame board" id="board">
+      <div class="frame-bar"><i></i><i></i><i></i><span>ai-tool-comparison · data.js (live)</span></div>
+      <div class="board-tabs" role="group" aria-label="Task">
+        <button type="button" aria-pressed="true" data-t="everyday" data-task="everyday">Everyday work</button>
+        <button type="button" aria-pressed="false" data-t="coding" data-task="coding">Coding</button>
+        <button type="button" aria-pressed="false" data-t="images" data-task="images">Images</button>
+        <button type="button" aria-pressed="false" data-t="research" data-task="research">Research</button>
+      </div>
+      <div class="board-body swap" id="boardBody" aria-live="polite">
+        <div>
+          <div class="lbl">Leading model for this task</div>
+          <p class="leader" id="bLeader"></p>
+          <p class="who" id="bWho"></p>
+          <ol class="top3" id="bTop"></ol>
+          <p class="note" id="bOv"></p>
+        </div>
+        <div>
+          <div class="lbl">Best free plan for this task</div>
+          <p class="leader" id="fName"></p>
+          <p class="who" id="fWho"></p>
+          <ol class="top3 feats" id="fRows"></ol>
+          <p class="note" id="fNote"></p>
+        </div>
+      </div>
+      <div class="board-foot"><span>Category score: Arena ratings as a 0–100 rank within each test, weighted like the tool. Free picks reflect documented access, not quality.</span><span id="bDate"></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="s" aria-labelledby="q-h">
+  <div class="wrap two">
+    <div class="prose">
+      <h2 id="q-h">Which AI is worth using? <span>And worth paying for?</span></h2>
+      <p>New models arrive every few weeks. The tool connects the work you need to do with evidence about <b>performance</b>, <b>access</b> and <b>limits</b>.</p>
+    </div>
+    <ol class="path">
+      <li><span>Start</span><div><b>Start with the task</b><p>Everyday work, code, images or research.</p></div></li>
+      <li><span>Compare</span><div><b>Compare the evidence</b><p>Exact models, scored only on tests they share.</p></div></li>
+      <li><span>Decide</span><div><b>Check the plan</b><p>Free or paid access, features and usage limits.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="s" aria-labelledby="m-h">
+  <div class="wrap">
+    <h2 id="m-h">Make the comparison fair <span>before averaging.</span></h2>
+    <div class="metric2">
+      <div class="panel"><span>Relative rank · 0–100</span><h3>Position within a test</h3><p>Each Arena rating becomes a percentile within the four-provider cohort, with ties sharing a midrank. 100 means the highest position in that test, not 100% accuracy.</p></div>
+      <div class="panel"><span>Shared tests only</span><h3>Same evidence, same weights</h3><p>Comparisons use only tests available for every selected model. Missing results never count as zero, and a broader average needs at least two shared tests.</p></div>
+    </div>
+    <p class="note">Small ranking differences are not proof of superiority: when the top two models' confidence intervals overlap, the tool says so.</p>
+  </div>
+</section>
+
+<section class="s" aria-labelledby="p-h">
+  <div class="wrap">
+    <div class="s-head">
+      <h2 id="p-h">From changing sources <span>to one usable dataset.</span></h2>
+      <p>One command refreshes the evidence. If anything fails validation, the previous release stays in place.</p>
+    </div>
+    <div class="pipe">
+      <div><code>collect_arena.py</code><h3>Collect</h3><p>Reads a revision-pinned Arena snapshot and the OpenRouter model catalog. No API key needed.</p></div>
+      <div><code>evidence.py</code><h3>Validate</h3><p>Checks structure, exact model identities, bounds and dates; duplicates are quarantined, not guessed.</p></div>
+      <div><code>check_update.py</code><h3>Review</h3><p>A gate compares the new snapshot with the last one and stops for review when new models appear.</p></div>
+      <div><code>update_data.py</code><h3>Publish</h3><p>Builds one complete data.js. The site recalculates its leaders from it; no HTML changes.</p></div>
+    </div>
+    <p class="note">Plan features and usage limits are reviewed by hand against official documentation; collection never relabels them as current.</p>
+    <div class="launch">
+      <div><h3>Explore the comparisons.</h3><p>Model scores, plan features and every linked source.</p></div>
+      <a class="btn primary" href="../ai-tool-comparison/index.html">Open the comparison tool<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<section class="s" aria-labelledby="l-h">
+  <div class="wrap two">
+    <div>
+      <h2 id="l-h">A shortlist, <span>with its limits stated.</span></h2>
+    </div>
+    <div class="prose">
+      <p style="margin-top:0">A benchmarked model configuration may not be exactly what a subscription serves, and rankings depend on the providers, dates and tests collected. The next improvement is a stronger model-to-plan mapping and more comparable evidence across tasks.</p>
+      <p class="note">For independent educational purposes. Source: Arena / lmarena-ai (CC BY 4.0), OpenRouter, and provider documentation. No endorsement implied.</p>
+    </div>
+  </div>
+  <div class="wrap">
+    <a class="next" href="movie-investment.html" style="margin-top:72px">
+      <div><span>Next project</span><b>Movie investment strategies</b></div>
+      <span class="btn">Next<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+  </div>
+</section>
+
+<section class="s contact" id="contact" aria-labelledby="contact-h">
+  <div class="wrap">
+    <h2 id="contact-h">Have a data or BI role in mind?</h2>
+    <p>I'm looking for a student position where I can contribute, learn from a team and work on real problems.</p>
+    <div class="actions">
+      <a class="btn primary" href="mailto:David198221@gmail.com">Email David<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn" href="https://www.linkedin.com/in/david-alter-9a361833b/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+    <p class="mail num">David198221@gmail.com</p>
+  </div>
+</section>
+</main>
+<footer><div class="wrap"><span>© 2026 David Alter · Israel · Product names and logos are trademarks of their owners</span><nav aria-label="Footer"><a href="../index.html#work">Projects</a><a href="../privacy.html">Privacy</a><a href="#main">Back to top</a></nav></div></footer>
+
+<script src="../assets/site.js"></script>
+<script src="../assets/js/ai-page.js"></script>
+</body>
+</html>

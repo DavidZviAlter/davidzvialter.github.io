@@ -1,0 +1,7 @@
+Tool icons, used nominatively (product names and logos are trademarks of their owners; no endorsement implied).
+- microsoft-power-bi.svg, python.svg, mysql-icon.svg, c.svg, c-plusplus.svg, c-sharp.svg:
+  SVG Logos by Gil Barbara, https://github.com/gilbarbara/logos, CC0-1.0 (via @iconify-json/logos 1.2.21)
+- file-type-excel.svg: VSCode Icons by Roberto Huertas, https://github.com/vscode-icons/vscode-icons, MIT (via @iconify-json/vscode-icons 1.2.100)
+  Microsoft Office product marks are not in any permitted icon set, so Excel uses its file-type icon.
+- pandas-icon.svg, claude-icon.svg, openai-icon.svg, cursor-icon.svg, antigravity.svg:
+  SVG Logos by Gil Barbara, https://github.com/gilbarbara/logos, CC0-1.0 (via @iconify-json/logos 1.2.21)
